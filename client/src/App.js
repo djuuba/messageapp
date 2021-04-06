@@ -1,23 +1,40 @@
-import logo from './logo.svg';
 import React, { useState, useEffect } from "react";
-import socketIOClient from "socket.io-client";
 import './App.scss';
 
-const ENDPOINT = "http://127.0.0.1:4001";
+const io = require('socket.io-client');
+
+const socket = io('ws://localhost:4001');
 
 function App() {
-  const [response, setResponse] = useState('');
+  const [messageList, setMessageList] = useState([]);
+  const [inputMessage, setInputMessage] = useState('');
+
+  function handleChatSend(e) {
+    e.preventDefault();
+    if (inputMessage) {
+      socket.emit('message', inputMessage);
+      setMessageList([...messageList, inputMessage]);
+      setInputMessage('');
+    }
+  }
 
   useEffect(() => {
-    const socket = socketIOClient(ENDPOINT);
-    socket.on("FromAPI", data => {
-      setResponse(data);
-    })
+    
   }, [])
-
+ 
   return (
     <div className="App">
-      It's <time dateTime={response}>{response}</time>
+      <ul>
+        {messageList.map(message => {
+          return (
+            <li>{message}</li>
+          );
+        })}
+      </ul>
+      <form onSubmit={(e) => {handleChatSend(e)}}>
+        <input placeholder="message" value={inputMessage} onChange={(e) => {setInputMessage(e.target.value)}}></input>
+        <input type="submit" value="submit"></input>
+      </form>
     </div>
   );
 }

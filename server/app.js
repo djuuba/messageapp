@@ -6,39 +6,27 @@ const cors = require('cors');
 const app = express();
 
 app.use(cors());
-app.options('*', cors());  // enable pre-flight
-
+/*app.options('*', cors());  // enable pre-flight*/
 
 const port = process.env.PORT || 4001
 const index = require('./routes/index');
 app.use(index);
 
 const server = http.createServer(app);
+
 const io = socketIo(server, {
     cors: {
-        origin: "http://localhost:3000",
-        methods: ["GET", "POST"],
+        origin: "http://localhost:3000"
     }
 });
-
-let interval;
 
 io.on('connection', (socket) => {
-    console.log('New client connected');
-    if (interval) {
-        clearInterval(interval);
-    }
-    interval = setInterval(() => getApiAndEmit(socket), 1000);
-    socket.on('disconnect', () => {
-        console.log('Client disconnected');
-        clearInterval(interval);
+    console.log('A user connected.');
+
+    socket.on('message', (message) => {
+        console.log(message);
+        io.emit('message', `${socket.id.substr(0, 2)} said ${message}`);
     });
 });
-
-const getApiAndEmit = socket => {
-    const response = new Date()
-
-    socket.emit("FromAPI", response);
-};
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
