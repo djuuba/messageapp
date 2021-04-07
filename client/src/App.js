@@ -8,19 +8,23 @@ const socket = io('ws://localhost:4001');
 function App() {
   const [messageList, setMessageList] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
+  const [userName, setUserName] = useState('');
 
   function handleChatSend(e) {
     e.preventDefault();
     if (inputMessage) {
       socket.emit('message', inputMessage);
+      socket.on('message', (message) => {
+        console.log(message);
+      })
       setMessageList([...messageList, inputMessage]);
       setInputMessage('');
     }
   }
 
   useEffect(() => {
-    
-  }, [])
+   
+  })
  
   return (
     <div className="App">
