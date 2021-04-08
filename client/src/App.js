@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import './App.scss';
 
 const io = require('socket.io-client');
-
 const socket = io('ws://localhost:4001');
 
 const roomList = [
@@ -18,6 +17,7 @@ function App() {
   const [userName, setUserName] = useState('');
   const [userNameIsChosen, setUserNameIsChosen] = useState(false);
   const [availableRooms, setAvailableRooms] = useState(roomList);
+  const [roomname, setRoomname] = useState('');
 
   function handleUsername(e) {
     e.preventDefault();
@@ -30,6 +30,14 @@ function App() {
         setUserNameIsChosen(true);
         setUserName('');
       }
+  }
+
+  function handleRoom(roomname) {
+    setRoomname(roomname);
+  }
+
+  function handleExit() {
+    setRoomname('');
   }
 
   function handleChatSend(e) {
@@ -58,16 +66,22 @@ function App() {
             <input type="submit" value="send"></input>
           </form>
         </div>
-      : <div>
-        <h2>Available rooms:</h2>
-          {availableRooms.map(roomname => {
-            return (
-              <div>
-                <div>{roomname}</div>
-                <button>Join room</button>
-              </div>)
-          })}
-        </div>
+      : !roomname ?
+          <div>
+            <h2>Available rooms:</h2>
+            {availableRooms.map(roomname => {
+              return (
+                <div>
+                  <div>{roomname}</div>
+                  <button onClick={() => handleRoom(roomname)}>Join room</button>
+                </div>)
+            })}
+          </div>
+        :
+          <div>
+            <h2>Now in room: { roomname }</h2>
+            <button onClick={() => {handleExit()}}>Exit room</button>
+          </div>
       }
       <ul>
         {messageList.map(message => {

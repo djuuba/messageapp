@@ -22,13 +22,19 @@ const io = socketIo(server, {
 });
 
 io.on('connection', (socket) => {
+    let username;
+    let room;
+
     console.log(`Client with id ${socket.id} connected.`);
+
     socket.on('message', (message) => {
         console.log(message);
         io.emit('message', `${socket.id} said ${message}`);
     });
+
     socket.on('username', (username) => {
         console.log(`Client ID ${socket.id} created user ${username}.`);
+        username = username;
     });
 });
 
