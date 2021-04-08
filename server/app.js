@@ -22,12 +22,15 @@ const io = socketIo(server, {
 });
 
 io.on('connection', (socket) => {
-    console.log('A user connected.');
-
+    console.log(`Client with id ${socket.id} connected.`);
     socket.on('message', (message) => {
         console.log(message);
-        io.emit('message', `${socket.id.substr(0, 2)} said ${message}`);
+        io.emit('message', `${socket.id} said ${message}`);
+    });
+    socket.on('username', (username) => {
+        console.log(`Client ID ${socket.id} created user ${username}.`);
     });
 });
+
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
