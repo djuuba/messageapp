@@ -1,4 +1,4 @@
-let users = [];
+let users = {};
 let roomList = [
     'Grandmas knitting club',
     'Motor enthusiasts',
@@ -7,41 +7,48 @@ let roomList = [
   ]
 
 function addUser(id, userName) {
-    if (!users.includes(id)) {
-        const user = {
-            id: id,
-            userName: userName,
-            room: ''
-        };
-        users.push(user);
-        return user;
+    if (!([id] in users)) {
+        users = {
+            ...users,
+            [`${id}`]: {
+                userName: userName,
+                room: ''
+            }
+        }
     } else {
-        throw 'User already exists.';
+      console.log('Can\'t add user - user already exists.');
     }
 }
 
 function getUser(id) {
-    let user;
-
-    if (users.some(e => e.id === id)) {
-       user = users.find(obj => {
-          return obj.id === id;
-      }).userName;
-      return user;
-  } else {
+    if ([id] in users) {
+      return users[id].userName;
+    } else {
       console.log('Can\'t get user - user doesn\'t exist.');
   }
 }
 
+function getCurrentRoom(id) {
+    return users[id].room
+};
+
 function deleteUser(id) {
-  if (users.some(e => e.id === id)) {
-    users = users.filter(key => {
-        return key.id != id;
-    })
-    console.log(`Removed user with id ${id}.`);
-  } else {
-      console.log('Can\'t delete user - user doesn\'t exist.');
-  }
+    if ([id] in users) {
+        delete users[id];
+        console.log(`Removed user with id ${id}.`);
+    } else {
+        console.log('Can\'t delete user - user doesn\'t exist.');
+    }
+}
+
+function joinRoom(id, room) {
+    users[id].room = room
+    console.log(users)
+}
+
+function leaveRoom(id, room) {
+    users[id].room = '';
+    console.log(users)
 }
 
 function getUsers() {
@@ -52,4 +59,4 @@ function getRoomList() {
     return roomList;
 }
 
-module.exports = { addUser, getUser, deleteUser, getUsers, getRoomList }
+module.exports = { addUser, getUser, deleteUser, getUsers, getRoomList, joinRoom, leaveRoom, getCurrentRoom }

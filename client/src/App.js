@@ -11,7 +11,7 @@ function App() {
   const [userName, setUserName] = useState('');
   const [userNameIsChosen, setUserNameIsChosen] = useState(false);
   const [roomList, setRoomList] = useState();
-  const [roomname, setRoomname] = useState('');
+  const [currentRoom, setCurrentRoom] = useState('');
 
   function handleUsername(e) {
     e.preventDefault();
@@ -25,14 +25,14 @@ function App() {
       }
   }
 
-  function handleRoomJoin(roomname) {
-    setRoomname(roomname);
-    socket.emit('joinroom', roomname);
+  function handleRoomJoin(currentRoom) {
+    setCurrentRoom(currentRoom);
+    socket.emit('joinroom', currentRoom);
   }
 
   function handleRoomExit() {
-    socket.emit('leaveroom', roomname);
-    setRoomname('');
+    socket.emit('leaveroom', currentRoom);
+    setCurrentRoom('');
   }
 
   function handleChatSend(e) {
@@ -75,20 +75,20 @@ function App() {
             <input type="submit" value="send"></input>
           </form>
         </div>
-      : !roomname ?
+      : !currentRoom ?
           <div>
             <h2>Available rooms:</h2>
-            {roomList.map(roomname => {
+            {roomList.map(currentRoom => {
               return (
                 <div>
-                  <div>{roomname}</div>
-                  <button onClick={() => handleRoomJoin(roomname)}>Join room</button>
+                  <div>{currentRoom}</div>
+                  <button onClick={() => handleRoomJoin(currentRoom)}>Join room</button>
                 </div>)
             })}
           </div>
         :
           <div>
-            <h2>Now in room: { roomname }</h2>
+            <h2>Now in room: { currentRoom }</h2>
             <button onClick={() => {handleRoomExit()}}>Exit room</button>
           </div>
       }
