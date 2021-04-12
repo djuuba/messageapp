@@ -1,11 +1,17 @@
 let users = [];
-let roomList = [];
+let roomList = [
+    'Grandmas knitting club',
+    'Motor enthusiasts',
+    'Cat corner',
+    'Sports madlads'
+  ]
 
 function addUser(id, userName) {
     if (!users.includes(id)) {
         const user = {
             id: id,
-            userName: userName
+            userName: userName,
+            room: ''
         };
         users.push(user);
         return user;
@@ -23,7 +29,7 @@ function getUser(id) {
       }).userName;
       return user;
   } else {
-      console.log('User doesn\'t exist.');
+      console.log('Can\'t get user - user doesn\'t exist.');
   }
 }
 
@@ -32,10 +38,9 @@ function deleteUser(id) {
     users = users.filter(key => {
         return key.id != id;
     })
-    console.log(users);
     console.log(`Removed user with id ${id}.`);
   } else {
-      console.log('User doesn\'t exist.');
+      console.log('Can\'t delete user - user doesn\'t exist.');
   }
 }
 
@@ -47,4 +52,4 @@ function getRoomList() {
     return roomList;
 }
 
-module.exports = { addUser, getUser, deleteUser, getUsers }
+module.exports = { addUser, getUser, deleteUser, getUsers, getRoomList }

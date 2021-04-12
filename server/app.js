@@ -2,7 +2,7 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io')
 const cors = require('cors');
-const {addUser, getUser, deleteUser, getUsers} = require('./users');
+const {addUser, getUser, deleteUser, getUsers, getRoomList} = require('./users');
 
 const app = express();
 
@@ -22,8 +22,6 @@ const io = socketIo(server, {
 });
 
 io.on('connection', (socket) => {
-    let username;
-    let room;
 
     console.log(`Client with id ${socket.id} connected.`);
 
@@ -37,16 +35,28 @@ io.on('connection', (socket) => {
         addUser(socket.id, username);
     });
 
+    socket.on('joinroom', (roomname) => {
+        console.log(`User ${getUser(socket.id)} joined room ${roomname}.`)
+        socket.join(roomname);
+        socket.to(roomname).emit('joinroom', `${getUser(socket.id)} joined the room.`)
+    })
+
+    socket.on('leaveroom', (roomname) => {
+        console.log(`User ${getUser(socket.id)} left room ${roomname}.`)
+        socket.leave(roomname);
+        socket.to(roomname).emit('leaveroom', `${getUser(socket.id)} left the room.`)
+    })
+
     socket.on('disconnect', (reason) => {
       console.log(`Client ID ${socket.id} with username ${getUser(socket.id)} disconnected.`);
       deleteUser(socket.id);
-    })
+    });
+
+   
 });
 
-
-
-io.on('disconnect', (socket) => {
-    console.log(`Client ${socket.id} disconnected.`);
+app.get('/roomlist', (req, res) => {
+    res.send(getRoomList());
 })
 
 

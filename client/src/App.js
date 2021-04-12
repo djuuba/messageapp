@@ -1,22 +1,16 @@
 import React, { useState, useEffect } from "react";
 import './App.scss';
+const Axios = require('axios');
 
 const io = require('socket.io-client');
 const socket = io('ws://localhost:4001');
-
-const roomList = [
-  'Grandmas knitting club',
-  'Motor enthusiasts',
-  'Cat corner',
-  'Sports madlads'
-]
 
 function App() {
   const [messageList, setMessageList] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [userName, setUserName] = useState('');
   const [userNameIsChosen, setUserNameIsChosen] = useState(false);
-  const [availableRooms, setAvailableRooms] = useState(roomList);
+  const [roomList, setRoomList] = useState();
   const [roomname, setRoomname] = useState('');
 
   function handleUsername(e) {
@@ -31,11 +25,13 @@ function App() {
       }
   }
 
-  function handleRoom(roomname) {
+  function handleRoomJoin(roomname) {
     setRoomname(roomname);
+    socket.emit('joinroom', roomname);
   }
 
-  function handleExit() {
+  function handleRoomExit() {
+    socket.emit('leaveroom', roomname);
     setRoomname('');
   }
 
@@ -51,9 +47,23 @@ function App() {
     }
   }
 
-  useEffect(() => {
-   
-  })
+  useEffect( () => {
+    async function getRoomList() {
+      const result = await Axios('http://localhost:4001/roomlist');
+      setRoomList(result.data);
+    }
+    
+    getRoomList();
+  }, [])
+
+  useEffect( () => {
+    socket.on('joinroom', (notification) => {
+      console.log(notification);
+    })
+    socket.on('leaveroom', (notification) => {
+      console.log(notification);
+    })
+  }, []);
  
   return (
     <div className="App">
@@ -68,18 +78,18 @@ function App() {
       : !roomname ?
           <div>
             <h2>Available rooms:</h2>
-            {availableRooms.map(roomname => {
+            {roomList.map(roomname => {
               return (
                 <div>
                   <div>{roomname}</div>
-                  <button onClick={() => handleRoom(roomname)}>Join room</button>
+                  <button onClick={() => handleRoomJoin(roomname)}>Join room</button>
                 </div>)
             })}
           </div>
         :
           <div>
             <h2>Now in room: { roomname }</h2>
-            <button onClick={() => {handleExit()}}>Exit room</button>
+            <button onClick={() => {handleRoomExit()}}>Exit room</button>
           </div>
       }
       <ul>
