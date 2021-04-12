@@ -34,9 +34,20 @@ io.on('connection', (socket) => {
 
     socket.on('username', (username) => {
         console.log(`Client ID ${socket.id} created user ${username}.`);
-        username = username;
+        addUser(socket.id, username);
     });
+
+    socket.on('disconnect', (reason) => {
+      console.log(`Client ID ${socket.id} with username ${getUser(socket.id)} disconnected.`);
+      deleteUser(socket.id);
+    })
 });
+
+
+
+io.on('disconnect', (socket) => {
+    console.log(`Client ${socket.id} disconnected.`);
+})
 
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
