@@ -6,6 +6,30 @@ let roomList = [
     'Sports madlads'
   ]
 
+let messageList = {
+
+}
+
+function populateMessageList() {
+    roomList.map(item => {
+        messageList = {
+            ...messageList,
+            [item]: []
+        }
+    })
+}
+
+populateMessageList();
+
+function saveMessage(user, room, message) {
+  messageList[room].push(`${user} said: ${message}`)
+  console.log(messageList);
+}
+
+function getMessageList(room) {
+  return messageList[room];
+}
+
 function addUser(id, userName) {
     if (!([id] in users)) {
         users = {
@@ -59,4 +83,4 @@ function getRoomList() {
     return roomList;
 }
 
-module.exports = { addUser, getUser, deleteUser, getUsers, getRoomList, joinRoom, leaveRoom, getCurrentRoom }
+module.exports = { addUser, getUser, deleteUser, getUsers, getRoomList, joinRoom, leaveRoom, getCurrentRoom, saveMessage, getMessageList }

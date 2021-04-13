@@ -28,6 +28,9 @@ function App() {
   function handleRoomJoin(currentRoom) {
     setCurrentRoom(currentRoom);
     socket.emit('joinroom', currentRoom);
+    socket.on('getmessages', (message) => {
+      setMessageList(message);
+    })
   }
 
   function handleRoomExit() {
@@ -40,9 +43,9 @@ function App() {
     if (inputMessage) {
       socket.emit('message', inputMessage);
       socket.on('message', (message) => {
+        setMessageList(message);
         console.log(message);
       })
-      setMessageList([...messageList, inputMessage]);
       setInputMessage('');
     }
   }

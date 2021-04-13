@@ -2,7 +2,7 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io')
 const cors = require('cors');
-const {addUser, getUser, deleteUser, getUsers, getRoomList, joinRoom, leaveRoom, getCurrentRoom} = require('./users');
+const {addUser, getUser, deleteUser, getUsers, getRoomList, joinRoom, leaveRoom, getCurrentRoom, saveMessage, getMessageList} = require('./users');
 
 const app = express();
 
@@ -28,8 +28,8 @@ io.on('connection', (socket) => {
     console.log(`Client with id ${socket.id} connected.`);
 
     socket.on('message', (message) => {
-        console.log(message);
-        socket.to(getCurrentRoom(socket.id)).emit('message', `${socket.id} said ${message}`);
+        saveMessage(getUser(socket.id), getCurrentRoom(socket.id), message);
+        io.to(getCurrentRoom(socket.id)).emit('message', getMessageList(getCurrentRoom(socket.id)))
     });
 
     socket.on('username', (username) => {
@@ -41,6 +41,7 @@ io.on('connection', (socket) => {
         console.log(`User ${getUser(socket.id)} joined room ${roomname}.`)
         joinRoom(socket.id, roomname);
         socket.join(roomname);
+        io.to(getCurrentRoom(socket.id)).emit('getmessages', getMessageList(getCurrentRoom(socket.id)))
         socket.to(roomname).emit('joinroom', `${getUser(socket.id)} joined the room.`)
     })
 
