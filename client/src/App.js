@@ -71,7 +71,7 @@ function App() {
  
   return (
     <div className="App">
-      
+      <div className="roomlist">
         {!userNameIsChosen ?
           <div>
             <h2>Please choose a username to see available rooms</h2>
@@ -83,32 +83,36 @@ function App() {
           : !currentRoom ?
             <div>
               <h2>Available rooms:</h2>
-              {roomList.map(currentRoom => {
-                return (
-                  <div>
-                    <div>{currentRoom}</div>
-                    <button onClick={() => handleRoomJoin(currentRoom)}>Join room</button>
-                  </div>)
-              })}
+              <div className="rooms">
+                {roomList.map(room => {
+                  return (
+                    <div className="room">
+                      <p>{room}</p>
+                      <button onClick={() => handleRoomJoin(room)}>Join room</button>
+                    </div>)
+                })}
+              </div>
             </div>
             :
             <div>
-              <h2>Now in room: {currentRoom}</h2>
+              <p>Now in room {currentRoom}</p>
               <button onClick={() => { handleRoomExit() }}>Exit room</button>
             </div>
         }
-      
-      <ul>
-        {messageList.map(message => {
-          return (
-            <li>{message.user} said {message.message}</li>
-          );
-        })}
-      </ul>
-      <form onSubmit={(e) => {handleChatSend(e)}}>
-        <input placeholder="message" value={inputMessage} onChange={(e) => {setInputMessage(e.target.value)}}></input>
-        <input type="submit" value="send"></input>
-      </form>
+      </div>
+      <div className="messages">
+        <ul>
+          {messageList.map(message => {
+            return (
+              <li>{message.user} said {message.message}</li>
+            );
+          })}
+        </ul>
+        <form onSubmit={(e) => { handleChatSend(e) }}>
+          <input placeholder="message" value={inputMessage} onChange={(e) => { setInputMessage(e.target.value) }}></input>
+          <input type="submit" value="send"></input>
+        </form>
+      </div>
     </div>
   );
 }
