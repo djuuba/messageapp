@@ -68,10 +68,41 @@ function App() {
       console.log(notification);
     })
   }, []);
+
+  function RoomList() {
+    if (userNameIsChosen) {
+      return (
+        <div>
+          <div className="rooms">
+            {roomList.map(room => {
+              return (
+                <div className={`room${currentRoom === room ? ' active': ''}${currentRoom && currentRoom != room ? ' inactive':''}`}>
+                  <p>{room}</p>
+                  {room === currentRoom ? 
+                  <button type="button" className="btn btn-secondary" onClick={() => handleRoomExit()}>Exit room</button>
+            :
+            <button type="button" className="btn btn-success" onClick={() => handleRoomJoin(room)}>Join room</button>}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )
+    } else {
+      return null;
+    }
+  }
  
   return (
     <div className="App">
+      <div className="header">
+        { currentRoom ?
+        <h2>Current room: {currentRoom}</h2>
+      :
+      <h2>Available rooms:</h2> }
+      </div>
       <div className="roomlist">
+        {/*
         {!userNameIsChosen ?
           <div>
             <h2>Please choose a username to see available rooms</h2>
@@ -99,7 +130,11 @@ function App() {
               <button onClick={() => { handleRoomExit() }}>Exit room</button>
             </div>
         }
+        */}
+        
+        <RoomList />
       </div>
+      { userNameIsChosen ? 
       <div className="messages">
         <ul>
           {messageList.map(message => {
@@ -111,8 +146,17 @@ function App() {
         <form onSubmit={(e) => { handleChatSend(e) }}>
           <input placeholder="message" value={inputMessage} onChange={(e) => { setInputMessage(e.target.value) }}></input>
           <input type="submit" value="send"></input>
-        </form>
-      </div>
+          </form>
+        </div>
+        :
+        <div>
+          <h2>Please choose a username to see available rooms</h2>
+          <form onSubmit={(e) => handleUsername(e)}>
+            <input placeholder="Username" value={userName} onChange={(e) => { setUserName(e.target.value) }}></input>
+            <input type="submit" value="Enter"></input>
+          </form>
+        </div>
+      }
     </div>
   );
 }

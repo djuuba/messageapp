@@ -62,6 +62,7 @@ function addUser(id, userName) {
     }
 }
 
+
 function getUser(id) {
     if ([id] in users) {
       return users[id].userName;
