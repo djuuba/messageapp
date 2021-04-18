@@ -19,10 +19,28 @@ function populateMessageList() {
     })
 }
 
+/*
+let messageList = {
+  Grandmas knitting club: [
+      {
+          User: 'johnny',
+          Message: 'heey'
+      },
+      {
+          User: 'jane',
+          Message: 'sup :D'
+      }
+    ]
+}
+*/
+
 populateMessageList();
 
 function saveMessage(user, room, message) {
-  messageList[room].push(`${user} said: ${message}`)
+  messageList[room].push({
+      user: user,
+      message: message
+  })
   console.log(messageList);
 }
 

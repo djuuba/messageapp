@@ -36,6 +36,7 @@ function App() {
   function handleRoomExit() {
     socket.emit('leaveroom', currentRoom);
     setCurrentRoom('');
+    setMessageList([]);
   }
 
   function handleChatSend(e) {
@@ -70,35 +71,37 @@ function App() {
  
   return (
     <div className="App">
-      {!userNameIsChosen ?
-        <div>
-          <h2>Please choose a username to see available rooms.</h2>
-          <form onSubmit={(e) => handleUsername(e)}>
-            <input placeholder="Username" value={userName} onChange={(e) => { setUserName(e.target.value) }}></input>
-            <input type="submit" value="send"></input>
-          </form>
-        </div>
-      : !currentRoom ?
+      
+        {!userNameIsChosen ?
           <div>
-            <h2>Available rooms:</h2>
-            {roomList.map(currentRoom => {
-              return (
-                <div>
-                  <div>{currentRoom}</div>
-                  <button onClick={() => handleRoomJoin(currentRoom)}>Join room</button>
-                </div>)
-            })}
+            <h2>Please choose a username to see available rooms</h2>
+            <form onSubmit={(e) => handleUsername(e)}>
+              <input placeholder="Username" value={userName} onChange={(e) => { setUserName(e.target.value) }}></input>
+              <input type="submit" value="send"></input>
+            </form>
           </div>
-        :
-          <div>
-            <h2>Now in room: { currentRoom }</h2>
-            <button onClick={() => {handleRoomExit()}}>Exit room</button>
-          </div>
-      }
+          : !currentRoom ?
+            <div>
+              <h2>Available rooms:</h2>
+              {roomList.map(currentRoom => {
+                return (
+                  <div>
+                    <div>{currentRoom}</div>
+                    <button onClick={() => handleRoomJoin(currentRoom)}>Join room</button>
+                  </div>)
+              })}
+            </div>
+            :
+            <div>
+              <h2>Now in room: {currentRoom}</h2>
+              <button onClick={() => { handleRoomExit() }}>Exit room</button>
+            </div>
+        }
+      
       <ul>
         {messageList.map(message => {
           return (
-            <li>{message}</li>
+            <li>{message.user} said {message.message}</li>
           );
         })}
       </ul>

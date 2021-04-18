@@ -1,8 +1,26 @@
+/* https://dribbble.com/shots/6702982-Chatbot */
+
+$fontcolor: #ffffff;
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    padding: 20px;
+    color: $fontcolor;
+    font-family: arial, sans-serif;
+    font-size: 1.5rem;
+}
+
 div {
     font-size: 20px;
 }
 
 .App {
-    width: 500px;
+    width: 100%;
     margin: auto;
+    background-color: rgb(31, 31, 31);
 }
+
