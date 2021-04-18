@@ -23,6 +23,7 @@ const io = socketIo(server, {
 
 
 
+
 io.on('connection', (socket) => {
 
     console.log(`Client with id ${socket.id} connected.`);
@@ -57,7 +58,6 @@ io.on('connection', (socket) => {
       deleteUser(socket.id);
     });
 
-   
 });
 
 app.get('/roomlist', (req, res) => {
