@@ -2,12 +2,12 @@
 
 $fontcolor: #ffffff;
 $fontcolor-secondary: #ffffff;
-$font-color-inactive: #cfcfcf;
+$font-color-inactive: #969696;
 $window-margin: 1rem;
 
 $background-primary: rgb(22, 22, 22);
-$background-secondary: rgb(59, 59, 59);
-$background-tertiary: rgb(51, 51, 51);
+$background-secondary: rgb(32, 32, 32);
+$background-tertiary: rgb(56, 56, 56);
 
 * {
     margin: 0;
@@ -19,11 +19,13 @@ html, body {
     height: 100%;
 }
 
+
 h2 {
     padding: 20px;
     color: $fontcolor;
     font-family: arial, sans-serif;
     font-size: 1.3rem;
+    margin: 0;
 }
 
 p {
@@ -40,6 +42,7 @@ div {
 
 .btn {
     width: 6rem;
+    padding: .2rem .5rem;
 }
 
 .App {
@@ -65,7 +68,7 @@ div {
 
 .rooms {
     background-color: $background-primary;
-    margin: $window-margin;
+    margin: 0 $window-margin $window-margin;
     border-radius: 5px;
 }
 
@@ -77,7 +80,7 @@ div {
     display: flex;
     justify-content: space-between;
     vertical-align: middle;
-    padding: 0.5rem;
+    padding: 0.5rem 0.8rem;
     margin: -0.2rem 0;
 }
 
@@ -91,7 +94,39 @@ div {
     font-size: 0.9rem;
 }
 
+.messagedisplay-container {
+    flex: 1;
+    flex-direction: column;
+}
+
 .messages {
+    margin: $window-margin;    
+    background-color: $background-tertiary;
+    align-items: center;
+    height: calc(100% - 7rem);
+}
+
+.chatinput {
     margin: $window-margin;
+    display: flex;
+    height: 4rem;
+    font-size: 1.2rem;
+}
+
+.chatinput > .input {
+    width: 100%;
+    padding: 1rem;
+    background-color: rgb(233, 233, 233);
+}
+
+.chatinput > .button {
+    width: 5rem;
+    font-size: 1.2rem;
+}
+
+
+.userdisplay {
+    width: 14rem;
+    background-color: $background-secondary;
 }
 

@@ -73,10 +73,11 @@ function App() {
     if (userNameIsChosen) {
       return (
         <div>
+          <h2>Available rooms</h2>
           <div className="rooms">
             {roomList.map(room => {
               return (
-                <div className={`room${currentRoom === room ? ' active': ''}${currentRoom && currentRoom != room ? ' inactive':''}`}>
+                <div className={`room${currentRoom === room ? ' active': ''}${currentRoom && currentRoom !== room ? ' inactive':''}`}>
                   <p>{room}</p>
                   {room === currentRoom ? 
                   <button type="button" className="btn btn-secondary" onClick={() => handleRoomExit()}>Exit room</button>
@@ -92,63 +93,44 @@ function App() {
       return null;
     }
   }
+
+  function UserDisplay() {
+    return (
+      <div className="userdisplay">
+       
+      </div>
+    )
+  }
  
   return (
     <div className="App">
       <div className="header">
-        { currentRoom ?
-        <h2>Current room: {currentRoom}</h2>
-      :
-      <h2>Available rooms:</h2> }
       </div>
       <div className="roomlist">
-        {/*
-        {!userNameIsChosen ?
-          <div>
-            <h2>Please choose a username to see available rooms</h2>
-            <form onSubmit={(e) => handleUsername(e)}>
-              <input placeholder="Username" value={userName} onChange={(e) => { setUserName(e.target.value) }}></input>
-              <input type="submit" value="send"></input>
-            </form>
-          </div>
-          : !currentRoom ?
-            <div>
-              <h2>Available rooms:</h2>
-              <div className="rooms">
-                {roomList.map(room => {
-                  return (
-                    <div className="room">
-                      <p>{room}</p>
-                      <button onClick={() => handleRoomJoin(room)}>Join room</button>
-                    </div>)
-                })}
-              </div>
-            </div>
-            :
-            <div>
-              <p>Now in room {currentRoom}</p>
-              <button onClick={() => { handleRoomExit() }}>Exit room</button>
-            </div>
-        }
-        */}
-        
         <RoomList />
       </div>
-      { userNameIsChosen ? 
-      <div className="messages">
-        <ul>
-          {messageList.map(message => {
-            return (
-              <li>{message.user} said {message.message}</li>
-            );
-          })}
-        </ul>
-        <form onSubmit={(e) => { handleChatSend(e) }}>
-          <input placeholder="message" value={inputMessage} onChange={(e) => { setInputMessage(e.target.value) }}></input>
-          <input type="submit" value="send"></input>
+      { userNameIsChosen ?
+        <div className="messagedisplay-container">
+          <div className="messages">
+            <ul>
+              {messageList.map(message => {
+                return (
+                  <li>{message.user} said {message.message}</li>
+                );
+              })}
+            </ul>
+
+          </div>
+          <form className="chatinput" onSubmit={(e) => { handleChatSend(e) }}>
+            <input className="input" placeholder="Enter message..." value={inputMessage} onChange={(e) => { setInputMessage(e.target.value) }}></input>
+            <input className="button btn btn-primary" type="submit" value="Send"></input>
           </form>
         </div>
-        :
+        : null}
+
+
+        <UserDisplay />
+      { !userNameIsChosen ?
         <div>
           <h2>Please choose a username to see available rooms</h2>
           <form onSubmit={(e) => handleUsername(e)}>
@@ -156,7 +138,7 @@ function App() {
             <input type="submit" value="Enter"></input>
           </form>
         </div>
-      }
+        : null}
     </div>
   );
 }
