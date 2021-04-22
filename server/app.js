@@ -42,7 +42,7 @@ io.on('connection', (socket) => {
         console.log(`User ${getUser(socket.id)} joined room ${roomname}.`)
         joinRoom(socket.id, roomname);
         socket.join(roomname);
-        io.to(getCurrentRoom(socket.id)).emit('getmessages', getMessageList(getCurrentRoom(socket.id)))
+        io.to(getCurrentRoom(socket.id)).emit('message', getMessageList(getCurrentRoom(socket.id)))
         socket.to(roomname).emit('joinroom', `${getUser(socket.id)} joined the room.`)
     })
 

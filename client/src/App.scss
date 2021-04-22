@@ -105,7 +105,8 @@ div {
     align-items: center;
     height: calc(100vh - 11rem);
     border-radius: 5px;
-    overflow: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .chatinput {
@@ -151,6 +152,7 @@ div {
     font-size: 1rem;
     background-color: #00a2ff;
     display: inline-block;
+    border: 0;
     border-radius: 10px;
     padding: 0.5rem;
 }

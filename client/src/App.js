@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import './App.scss';
 const Axios = require('axios');
 
@@ -12,6 +12,7 @@ function App() {
   const [userNameIsChosen, setUserNameIsChosen] = useState(false);
   const [roomList, setRoomList] = useState();
   const [currentRoom, setCurrentRoom] = useState('');
+  const messagesEnd = useRef(null);
 
   function handleUsername(e) {
     e.preventDefault();
@@ -25,12 +26,10 @@ function App() {
       }
   }
 
-  function handleRoomJoin(currentRoom) {
-    setCurrentRoom(currentRoom);
-    socket.emit('joinroom', currentRoom);
-    socket.on('getmessages', (message) => {
-      setMessageList(message);
-    })
+  function handleRoomJoin(room) {
+    setCurrentRoom(room);
+    socket.emit('joinroom', room);
+    console.log('joining room ' + room);
   }
 
   function handleRoomExit() {
@@ -43,12 +42,14 @@ function App() {
     e.preventDefault();
     if (inputMessage) {
       socket.emit('message', inputMessage);
-      socket.on('message', (message) => {
-        setMessageList(message);
-        console.log(message);
-      })
+      
       setInputMessage('');
     }
+    
+  }
+
+  function scrollToBottom() {
+    messagesEnd.current?.scrollIntoView({ behavior: "smooth" });
   }
 
   useEffect( () => {
@@ -56,9 +57,12 @@ function App() {
       const result = await Axios('http://localhost:4001/roomlist');
       setRoomList(result.data);
     }
-    
     getRoomList();
   }, [])
+
+  useEffect( () => {
+    scrollToBottom();
+  }, [messageList]);
 
   useEffect( () => {
     socket.on('joinroom', (notification) => {
@@ -67,7 +71,12 @@ function App() {
     socket.on('leaveroom', (notification) => {
       console.log(notification);
     })
+    socket.on('message', (message) => {
+      setMessageList(message);
+    })
   }, []);
+
+
 
   function RoomList() {
     if (userNameIsChosen) {
@@ -120,6 +129,9 @@ function App() {
                 </div>
               )
             })}
+            <div style={{ float:"left", clear: "both" }}
+             ref={messagesEnd}>
+            </div>
           </div>
           <form className="chatinput" onSubmit={(e) => { handleChatSend(e) }}>
             <input
