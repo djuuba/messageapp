@@ -97,16 +97,31 @@ div {
 .messagedisplay-container {
     flex: 1;
     flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.notificationbox {
+    position: absolute;
+    height: 2rem;
+    right: $window-margin;
+    left: $window-margin;
+    background-color: black;
+    opacity: 0.85;
+    color: rgb(228, 228, 228);
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
 }
 
 .messages {
     margin: $window-margin;    
     background-color: $background-tertiary;
-    align-items: center;
     height: calc(100vh - 11rem);
     border-radius: 5px;
     overflow-y: auto;
     overflow-x: hidden;
+    
 }
 
 .chatinput {
@@ -131,6 +146,7 @@ div {
 .chatinput > .button {
     width: 5rem;
     font-size: 1.2rem;
+    margin-left: 0.5rem;
 }
 
 .userdisplay {
@@ -142,6 +158,19 @@ div {
     color: white;
     width: 100%;
     padding: 0.8rem 0.8rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.currentuser {
+
+}
+
+.currentuser > .messageblob {
+    background-color: #14a800;
 }
 
 .username {
@@ -156,3 +185,27 @@ div {
     border-radius: 10px;
     padding: 0.5rem;
 }
+
+.hidden {
+    visibility: hidden;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #aaaaaa;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(97, 97, 97);
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }

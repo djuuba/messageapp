@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
         joinRoom(socket.id, roomname);
         socket.join(roomname);
         io.to(getCurrentRoom(socket.id)).emit('message', getMessageList(getCurrentRoom(socket.id)))
-        socket.to(roomname).emit('joinroom', `${getUser(socket.id)} joined the room.`)
+        socket.to(roomname).emit('joinroom', getUser(socket.id))
     })
 
     socket.on('leaveroom', (roomname) => {

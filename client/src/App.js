@@ -12,6 +12,7 @@ function App() {
   const [userNameIsChosen, setUserNameIsChosen] = useState(false);
   const [roomList, setRoomList] = useState();
   const [currentRoom, setCurrentRoom] = useState('');
+  const [userJoined, setUserJoined] = useState(null);
   const messagesEnd = useRef(null);
 
   function handleUsername(e) {
@@ -29,7 +30,6 @@ function App() {
   function handleRoomJoin(room) {
     setCurrentRoom(room);
     socket.emit('joinroom', room);
-    console.log('joining room ' + room);
   }
 
   function handleRoomExit() {
@@ -65,9 +65,15 @@ function App() {
   }, [messageList]);
 
   useEffect( () => {
-    socket.on('joinroom', (notification) => {
-      console.log(notification);
-    })
+    socket.on('joinroom', (user) => {
+      setUserJoined(user);
+      return clearTimeout(setTimeout(() => {
+        setUserJoined(null)
+      }, 4000))
+    });
+  }, [])
+
+  useEffect( () => {
     socket.on('leaveroom', (notification) => {
       console.log(notification);
     })
@@ -75,8 +81,6 @@ function App() {
       setMessageList(message);
     })
   }, []);
-
-
 
   function RoomList() {
     if (userNameIsChosen) {
@@ -121,9 +125,10 @@ function App() {
       { userNameIsChosen ?
         <div className="messagedisplay-container">
           <div className="messages">
+            <div className={`notificationbox${userJoined ? ' show' : ' hidden'}`}><p>{userJoined} joined the room</p></div>
             {messageList.map(message => {
               return (
-                <div className="msg">
+                <div className={`msg${message.user === userName ? ' currentuser' : ' '}`}>
                   <div className="username">{message.user}</div>
                   <div className="messageblob">{message.message}</div>
                 </div>
