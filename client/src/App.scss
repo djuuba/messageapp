@@ -103,7 +103,9 @@ div {
     margin: $window-margin;    
     background-color: $background-tertiary;
     align-items: center;
-    height: calc(100% - 7rem);
+    height: calc(100vh - 11rem);
+    border-radius: 5px;
+    overflow: scroll;
 }
 
 .chatinput {
@@ -116,7 +118,13 @@ div {
 .chatinput > .input {
     width: 100%;
     padding: 1rem;
-    background-color: rgb(233, 233, 233);
+    background-color: rgb(241, 241, 241);
+    border: 0;
+    border-radius: 5px;
+    
+    &:disabled {
+      background-color: rgb(207, 207, 207);
+    }
 }
 
 .chatinput > .button {
@@ -124,9 +132,25 @@ div {
     font-size: 1.2rem;
 }
 
-
 .userdisplay {
     width: 14rem;
     background-color: $background-secondary;
 }
 
+.msg {
+    color: white;
+    width: 100%;
+    padding: 0.8rem 0.8rem 0;
+}
+
+.username {
+   font-size: 0.8rem;
+}
+
+.messageblob {
+    font-size: 1rem;
+    background-color: #00a2ff;
+    display: inline-block;
+    border-radius: 10px;
+    padding: 0.5rem;
+}

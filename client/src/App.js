@@ -112,29 +112,37 @@ function App() {
       { userNameIsChosen ?
         <div className="messagedisplay-container">
           <div className="messages">
-            <ul>
-              {messageList.map(message => {
-                return (
-                  <li>{message.user} said {message.message}</li>
-                );
-              })}
-            </ul>
-
+            {messageList.map(message => {
+              return (
+                <div className="msg">
+                  <div className="username">{message.user}</div>
+                  <div className="messageblob">{message.message}</div>
+                </div>
+              )
+            })}
           </div>
           <form className="chatinput" onSubmit={(e) => { handleChatSend(e) }}>
-            <input className="input" placeholder="Enter message..." value={inputMessage} onChange={(e) => { setInputMessage(e.target.value) }}></input>
-            <input className="button btn btn-primary" type="submit" value="Send"></input>
+            <input
+              disabled={currentRoom ? '' : 'disabled'}
+              className="input"
+              placeholder={currentRoom ? 'Enter message...' : 'Join a room to send messages'}
+              value={inputMessage}
+              onChange={(e) => { setInputMessage(e.target.value) }}>
+            </input>
+            {currentRoom ? <input className="button btn btn-primary" type="submit" value="Send"></input> : null}
           </form>
         </div>
         : null}
-
-
         <UserDisplay />
       { !userNameIsChosen ?
         <div>
           <h2>Please choose a username to see available rooms</h2>
           <form onSubmit={(e) => handleUsername(e)}>
-            <input placeholder="Username" value={userName} onChange={(e) => { setUserName(e.target.value) }}></input>
+            <input 
+              placeholder="Username"
+              value={userName} 
+              onChange={(e) => { setUserName(e.target.value) }}>
+            </input>
             <input type="submit" value="Enter"></input>
           </form>
         </div>
