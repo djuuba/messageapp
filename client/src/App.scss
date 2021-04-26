@@ -101,18 +101,7 @@ div {
     position: relative;
 }
 
-.notificationbox {
-    position: absolute;
-    height: 2rem;
-    right: $window-margin;
-    left: $window-margin;
-    background-color: black;
-    opacity: 0.85;
-    color: rgb(228, 228, 228);
-    font-size: 1rem;
-    display: flex;
-    justify-content: center;
-}
+
 
 .messages {
     margin: $window-margin;    
@@ -186,8 +175,52 @@ div {
     padding: 0.5rem;
 }
 
+.notificationbox {
+    position: absolute;
+    height: 2rem;
+    right: $window-margin;
+    left: $window-margin;
+    background-color: black;
+    opacity: 0.85;
+    color: rgb(228, 228, 228);
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
 .hidden {
-    visibility: hidden;
+    opacity: 0;
+	animation-name: fadeOutOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-out;
+	animation-duration: 0.2s;
+}
+
+.show {
+    opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 0.2s;
+}
+
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes fadeOutOpacity {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+        visibility: hidden;
+	}
 }
 
 /* width */

@@ -50,7 +50,7 @@ io.on('connection', (socket) => {
         console.log(`User ${getUser(socket.id)} left room ${roomname}.`);
         leaveRoom(socket.id, roomname);
         socket.leave(roomname);
-        socket.to(roomname).emit('leaveroom', `${getUser(socket.id)} left the room.`)
+        socket.to(roomname).emit('leaveroom', getUser(socket.id))
     })
 
     socket.on('disconnect', (reason) => {

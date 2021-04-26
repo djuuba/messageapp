@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import './App.scss';
+import useDeepCompareEffect from 'use-deep-compare-effect'
 const Axios = require('axios');
 
 const io = require('socket.io-client');
@@ -12,7 +13,8 @@ function App() {
   const [userNameIsChosen, setUserNameIsChosen] = useState(false);
   const [roomList, setRoomList] = useState();
   const [currentRoom, setCurrentRoom] = useState('');
-  const [userJoined, setUserJoined] = useState(null);
+  const [userJoined, setUserJoined] = useState();
+  const [userLeft, setUserLeft] = useState()
   const messagesEnd = useRef(null);
 
   function handleUsername(e) {
@@ -60,27 +62,33 @@ function App() {
     getRoomList();
   }, [])
 
-  useEffect( () => {
+  // Automatically scroll to bottom on new messages
+  useDeepCompareEffect( () => {
     scrollToBottom();
   }, [messageList]);
 
   useEffect( () => {
     socket.on('joinroom', (user) => {
       setUserJoined(user);
-      return clearTimeout(setTimeout(() => {
-        setUserJoined(null)
-      }, 4000))
-    });
-  }, [])
-
-  useEffect( () => {
-    socket.on('leaveroom', (notification) => {
-      console.log(notification);
+    })
+    socket.on('leaveroom', (user) => {
+      setUserLeft(user);
     })
     socket.on('message', (message) => {
       setMessageList(message);
     })
   }, []);
+
+  // These useEffects sets timers for room join/leave notifications
+  useEffect( () => {
+    const timer = setTimeout(() => setUserJoined(null), 4000);
+    return () => clearTimeout(timer);
+  }, [userJoined]);
+
+  useEffect( () => {
+    const timer = setTimeout(() => setUserLeft(null), 4000);
+    return () => clearTimeout(timer);
+  }, [userLeft]);
 
   function RoomList() {
     if (userNameIsChosen) {
@@ -125,7 +133,7 @@ function App() {
       { userNameIsChosen ?
         <div className="messagedisplay-container">
           <div className="messages">
-            <div className={`notificationbox${userJoined ? ' show' : ' hidden'}`}><p>{userJoined} joined the room</p></div>
+            <div className={`notificationbox${(userJoined || userLeft) ? ' show' : ' hidden'}`}><p>{ userJoined ? `${userJoined} joined the room` : `${userLeft} left the room` }</p></div>
             {messageList.map(message => {
               return (
                 <div className={`msg${message.user === userName ? ' currentuser' : ' '}`}>
