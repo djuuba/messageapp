@@ -31,7 +31,7 @@ function App() {
 
   function handleRoomJoin(room) {
     setCurrentRoom(room);
-    socket.emit('joinroom', room);
+    socket.emit('joinroom', room, currentRoom);
   }
 
   function handleRoomExit() {
@@ -70,6 +70,7 @@ function App() {
   useEffect( () => {
     socket.on('joinroom', (user) => {
       setUserJoined(user);
+      console.log(user);
     })
     socket.on('leaveroom', (user) => {
       setUserLeft(user);

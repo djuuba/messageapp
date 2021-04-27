@@ -38,12 +38,15 @@ io.on('connection', (socket) => {
         addUser(socket.id, username);
     });
 
-    socket.on('joinroom', (roomname) => {
+    socket.on('joinroom', (roomname, currentRoom) => {
+        if (currentRoom) {
+          socket.leave(currentRoom);
+        }
         console.log(`User ${getUser(socket.id)} joined room ${roomname}.`)
         joinRoom(socket.id, roomname);
         socket.join(roomname);
         io.to(getCurrentRoom(socket.id)).emit('message', getMessageList(getCurrentRoom(socket.id)))
-        socket.to(roomname).emit('joinroom', getUser(socket.id))
+        socket.to(roomname).emit('joinroom', `${getUser(socket.id)} joined ${roomname}`)
     })
 
     socket.on('leaveroom', (roomname) => {
