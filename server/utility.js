@@ -6,9 +6,7 @@ let roomList = [
     'Sports madlads'
   ]
 
-let messageList = {
-
-}
+let messageList = {};
 
 function populateMessageList() {
     roomList.map(item => {
@@ -18,21 +16,6 @@ function populateMessageList() {
         }
     })
 }
-
-/*
-let messageList = {
-  Grandmas knitting club: [
-      {
-          User: 'johnny',
-          Message: 'heey'
-      },
-      {
-          User: 'jane',
-          Message: 'sup :D'
-      }
-    ]
-}
-*/
 
 populateMessageList();
 
@@ -57,18 +40,14 @@ function addUser(id, userName) {
                 room: ''
             }
         }
-    } else {
-      console.log('Can\'t add user - user already exists.');
     }
 }
 
 
 function getUser(id) {
     if ([id] in users) {
-      return users[id].userName;
-    } else {
-      console.log('Can\'t get user - user doesn\'t exist.');
-  }
+        return users[id].userName;
+    }
 }
 
 function getCurrentRoom(id) {

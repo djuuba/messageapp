@@ -56,6 +56,7 @@ function App() {
     messagesEnd.current?.scrollIntoView({ behavior: "smooth" });
   }
 
+  // Get roomlist
   useEffect( () => {
     async function getRoomList() {
       const result = await Axios('http://localhost:4001/roomlist');
@@ -69,6 +70,7 @@ function App() {
     scrollToBottom();
   }, [messageList]);
 
+  // Socket.io listeners
   useEffect( () => {
     socket.on('joinroom', (user) => {
       setUserJoined(user);
@@ -85,7 +87,7 @@ function App() {
     })
   }, []);
 
-  // These useEffects sets timers for room join/leave notifications
+  // Sets timers for room join/leave notifications
   useEffect(() => {
     let timer;
 
@@ -142,7 +144,6 @@ function App() {
         <div className={`notificationbox hidden`}><p></p></div>
       )
     }
-    
   }
 
   function UserDisplay() {
