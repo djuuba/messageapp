@@ -14,7 +14,9 @@ function App() {
   const [roomList, setRoomList] = useState();
   const [currentRoom, setCurrentRoom] = useState('');
   const [userJoined, setUserJoined] = useState();
-  const [userLeft, setUserLeft] = useState()
+  const [userLeft, setUserLeft] = useState();
+  const [showJoinNotification, setShowJoinNotification] = useState(false);
+  const [showLeaveNotification, setShowLeaveNotification] = useState(false);
   const messagesEnd = useRef(null);
 
   function handleUsername(e) {
@@ -70,10 +72,13 @@ function App() {
   useEffect( () => {
     socket.on('joinroom', (user) => {
       setUserJoined(user);
-      console.log(user);
+      setShowLeaveNotification(false);
+      setShowJoinNotification(true);
     })
     socket.on('leaveroom', (user) => {
       setUserLeft(user);
+      setShowJoinNotification(false);
+      setShowLeaveNotification(true);
     })
     socket.on('message', (message) => {
       setMessageList(message);
@@ -81,15 +86,18 @@ function App() {
   }, []);
 
   // These useEffects sets timers for room join/leave notifications
-  useEffect( () => {
-    const timer = setTimeout(() => setUserJoined(null), 4000);
-    return () => clearTimeout(timer);
-  }, [userJoined]);
+  useEffect(() => {
+    let timer;
 
-  useEffect( () => {
-    const timer = setTimeout(() => setUserLeft(null), 4000);
-    return () => clearTimeout(timer);
-  }, [userLeft]);
+    if (showJoinNotification) {
+      timer = setTimeout(() => setShowJoinNotification(false), 4000);
+      return () => clearTimeout(timer);
+    }
+    if (showLeaveNotification) {
+      timer = setTimeout(() => setShowLeaveNotification(false), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [showJoinNotification, showLeaveNotification]);
 
   function RoomList() {
     if (userNameIsChosen) {
@@ -116,6 +124,27 @@ function App() {
     }
   }
 
+  function NotificationBox() {
+    if (showJoinNotification) {
+      return (
+        <div className={`notificationbox show`}><p>{`${userJoined} joined the room`}</p></div>
+      )
+    }
+
+    if (showLeaveNotification) {
+      return (
+        <div className={`notificationbox show`}><p>{`${userLeft} left the room`}</p></div>
+      )
+    }
+
+    else {
+      return (
+        <div className={`notificationbox hidden`}><p></p></div>
+      )
+    }
+    
+  }
+
   function UserDisplay() {
     return (
       <div className="userdisplay">
@@ -134,7 +163,7 @@ function App() {
       { userNameIsChosen ?
         <div className="messagedisplay-container">
           <div className="messages">
-            <div className={`notificationbox${(userJoined || userLeft) ? ' show' : ' hidden'}`}><p>{ userJoined ? `${userJoined} joined the room` : `${userLeft} left the room` }</p></div>
+            <NotificationBox />
             {messageList.map(message => {
               return (
                 <div className={`msg${message.user === userName ? ' currentuser' : ' '}`}>

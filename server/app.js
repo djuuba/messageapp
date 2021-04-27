@@ -41,20 +41,21 @@ io.on('connection', (socket) => {
     socket.on('joinroom', (roomname, currentRoom) => {
         if (currentRoom) {
           socket.leave(currentRoom);
+          socket.to(currentRoom).emit('leaveroom', getUser(socket.id))
         }
         console.log(`User ${getUser(socket.id)} joined room ${roomname}.`)
         joinRoom(socket.id, roomname);
         socket.join(roomname);
-        io.to(getCurrentRoom(socket.id)).emit('message', getMessageList(getCurrentRoom(socket.id)))
-        socket.to(roomname).emit('joinroom', `${getUser(socket.id)} joined ${roomname}`)
-    })
+        io.to(getCurrentRoom(socket.id)).emit('message', getMessageList(getCurrentRoom(socket.id)));
+        socket.to(roomname).emit('joinroom', getUser(socket.id));
+    });
 
     socket.on('leaveroom', (roomname) => {
         console.log(`User ${getUser(socket.id)} left room ${roomname}.`);
         leaveRoom(socket.id, roomname);
         socket.leave(roomname);
         socket.to(roomname).emit('leaveroom', getUser(socket.id))
-    })
+    });
 
     socket.on('disconnect', (reason) => {
       console.log(`Client ID ${socket.id} with username ${getUser(socket.id)} disconnected.`);
