@@ -13,12 +13,10 @@
 
 #### Server side
 
-Express.js server resides in `/server/app.js` and runs on port **4001** by default.
-
+Express.js server resides in `/server/app.js` and runs on port **4001** by default.\
 All Socket.IO listeners and emitters are in this file.
 
-All utility functions reside in `/server/utility.js`, along with some basic objects that serve as a simple database.
-
+All utility functions reside in `/server/utility.js`, along with some basic objects that serve as a simple database.\
 If you want to add/remove rooms, simply change the **roomList** array in this file.
 
 ![image](https://user-images.githubusercontent.com/21296522/116309248-d4b66680-a7a8-11eb-9f18-002261363e9d.png)
