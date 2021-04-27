@@ -21,7 +21,10 @@ If you want to add/remove rooms, simply change the **roomList** array in this fi
 
 ![image](https://user-images.githubusercontent.com/21296522/116309248-d4b66680-a7a8-11eb-9f18-002261363e9d.png)
 
+Start the server by changing directory to `/server`, and type command `npm run devstart`.
+
 #### Client side
 
-Main React source code resides in `/client/src/App.js` and runs on port **3000** by default.
+Main React source code resides in `/client/src/App.js` and runs on port **3000** by default.\
+Start the React development server by changing directory to `/client`, and type command `npm start`.
 
