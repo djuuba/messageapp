@@ -1,4 +1,4 @@
-# Chatlifier Instant Messaging App
+# Chatify Instant Messaging App
 
 ![image](https://user-images.githubusercontent.com/21296522/116308542-e64b3e80-a7a7-11eb-99c1-f3c09c62ef66.png)
 
