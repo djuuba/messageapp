@@ -104,7 +104,7 @@ function App() {
   function RoomList() {
     if (userNameIsChosen) {
       return (
-        <div>
+        <div data-testid="roomlist">
           <h2>Available rooms</h2>
           <div className="rooms">
             {roomList.map(room => {
